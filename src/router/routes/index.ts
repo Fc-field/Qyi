@@ -1,5 +1,5 @@
 export default [{
     path: '/',
-    name: 'Home',
-    component: ()=>import("@/views/index.vue")
+    name: 'Search',
+    component: ()=>import("@/views/SearchView/index.vue")
 }]

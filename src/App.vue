@@ -1,21 +1,42 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <router-view></router-view>
+  <div class="common-layout">
+    <el-container>
+      <el-container>
+        <el-aside width="200px">
+          <SideBar></SideBar>
+        </el-aside>
+        <el-container>
+          <el-main>
+            <router-view></router-view>
+          </el-main>
+        </el-container>
+      </el-container>
+      <el-footer>Footer</el-footer>
+    </el-container>
+  </div>
 </template>
 
+<script setup lang="ts">
+import SideBar from "@/views/SideBar/index.vue"
+</script>
+
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.common-layout {
+  height: 100vh;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+
+.el-aside {
+  height: 90vh;
+  background-color: palegreen;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.el-main {
+  height: 90vh;
+  background-color: red;
+}
+
+.el-footer {
+  height: 10vh;
+  background-color: greenyellow;
 }
 </style>
