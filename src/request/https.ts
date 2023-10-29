@@ -1,5 +1,6 @@
 import axios from 'axios'; // 引入axios
-//https://mingtsing.cn/api
+import { errorHandle } from './errorHandle';
+
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.timeout = 10000; //设置请求超时
 
@@ -26,11 +27,13 @@ axios.interceptors.response.use(
         const res = response.data;
         // console.log(response.headers["content-disposition"], "Res");
         // const disposition = response.headers["content-disposition"];
-        // 获取数据成功
+        // 获取数据
         if (res.code === 200) {
-        return res.result;
-        }
-        
+            return res.result;
+        } 
+        const code = res.code ?? response.status;
+        errorHandle(code, res.message ?? response.statusText);
+        return Promise.reject(res.message);
     },
 );
 

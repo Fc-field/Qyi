@@ -34,7 +34,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "electron-main/**/*.ts",
-    "electron-preload/**/*.ts"
+    "electron-preload/**/*.ts",
+    "auto-imports.d.ts"
   ],
   "references": [
     {

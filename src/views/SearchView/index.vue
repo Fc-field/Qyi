@@ -6,8 +6,18 @@
                     @keyup.enter="cloudSearch(1)" style="width: 40%;" />
             </el-header>
             <el-main>
-                <QyiTable :col-configs="colConfigs" :table-data="tableData"></QyiTable>
-                <QyiPagination :total="total" :get-list="cloudSearch"></QyiPagination>
+
+                <div v-show="tableData.length">
+                    <QyiTable :col-configs="colConfigs" :table-data="tableData"></QyiTable>
+                    <QyiPagination :total="total" :get-list="cloudSearch"></QyiPagination>
+                </div>
+
+                <div v-show="!tableData.length">
+                    快开始搜歌吧
+                </div>
+                <div v-loading="loading" element-loading-text="加载中..." style="height: 100px;">
+                </div>
+
             </el-main>
         </el-container>
     </div>
@@ -44,14 +54,18 @@ const colConfigs = reactive([
 ]);
 const tableData = reactive<Array<data>>([]); //歌曲数据
 const total = ref(0);//歌曲总数
+const loading = ref(false);
 //搜索歌曲
 const cloudSearch = async (offset: number) => {
     tableData.length = 0;
-    const { songs, songCount } = (await search({
+    loading.value = true;
+    const result = (await search({
         keywords: keywords.value,
         limit: 100,
         offset: (offset - 1)
     })) as unknown as cloudSearchInfo;
+
+    const { songs, songCount } = result;
     total.value = songCount;
     songs.map((item) => {
         const min = Math.floor(item.dt / 1000 / 60);
@@ -69,6 +83,8 @@ const cloudSearch = async (offset: number) => {
             time: time()
         })
     });
+    loading.value = false;
+
 
 }
 

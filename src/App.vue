@@ -32,7 +32,7 @@ import SideBar from "@/views/SideBar/index.vue"
 
 .el-main {
   height: 90vh;
-  background-color: red;
+  /* background-color: red; */
 }
 
 .el-footer {
