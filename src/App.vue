@@ -11,13 +11,16 @@
           </el-main>
         </el-container>
       </el-container>
-      <el-footer>Footer</el-footer>
+      <el-footer>
+        <PlayMusic></PlayMusic>
+      </el-footer>
     </el-container>
   </div>
 </template>
 
 <script setup lang="ts">
-import SideBar from "@/views/SideBar/index.vue"
+import SideBar from "@/views/SideBar/index.vue";
+import PlayMusic from "@/views/PlayMusic/index.vue"
 </script>
 
 <style scoped>

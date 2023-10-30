@@ -8,7 +8,7 @@
             <el-main>
 
                 <div v-show="tableData.length">
-                    <QyiTable :col-configs="colConfigs" :table-data="tableData"></QyiTable>
+                    <QyiTable :col-configs="colConfigs" :table-data="tableData" :click-row="playMuisc"></QyiTable>
                     <QyiPagination :total="total" :get-list="cloudSearch"></QyiPagination>
                 </div>
 
@@ -26,11 +26,15 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
-import { search } from "@/request/api"
+import { search, checkSong, getMusicUrl } from "@/request/api"
 import QyiTable from '@/components/QyiTable.vue';
 import { data } from "@/utils"
-import { cloudSearchInfo } from "./type"
+import { cloudSearchInfo, musicUrlInfo } from "./type"
 import QyiPagination from "@/components/QyiPagination.vue"
+import { useMusicStore } from "@/stores/index"
+
+
+const musicStore = useMusicStore();
 
 const keywords = ref(""); //关键词
 //表单配置
@@ -80,10 +84,29 @@ const cloudSearch = async (offset: number) => {
             name: item.name,
             singer: item.ar[0].name,
             album: item.al.name,
-            time: time()
+            time: time(),
+            id: item.id,
+            picUrl: item.al.picUrl,
+            musicUrl: "",
+            dt: item.dt
         })
     });
     loading.value = false;
+}
+
+//播放歌曲
+const playMuisc = async (id: string, row: data) => {
+    console.log(id);
+    // const result = await getMusicUrl({ id, level: "standard " });
+    const isPlay = await checkSong({ id }) as unknown as string; //检测歌曲是否可用 ok || “字符串”
+    const musicData = isPlay === "ok" ? await getMusicUrl({ id, level: "standard " }) as unknown as musicUrlInfo[] : [{ url: null }];
+    if (musicData[0].url) {
+        row.musicUrl = musicData[0].url;
+        musicStore.setPlayMusic(row);
+    } else {
+        ElMessage.error("暂无该歌曲版权");
+    }
+
 
 
 }

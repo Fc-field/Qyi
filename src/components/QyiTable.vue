@@ -1,5 +1,7 @@
 <template>
-    <el-table :data="tableData" show-overflow-tooltip="true" style=" width: 100%" :row-class-name="tableRowClassName">
+    <el-table :data="tableData" show-overflow-tooltip="true" style=" width: 100%" :row-class-name="tableRowClassName"
+        @row-dblclick="clickRow">
+        <el-table-column type="index" :index="indexMethod" />
         <el-table-column v-for="colConfig in colConfigs" :prop="colConfig.prop" :label="colConfig.label"></el-table-column>
     </el-table>
 </template>
@@ -14,10 +16,12 @@ type colConfig = {
 }
 const props = defineProps<{
     colConfigs: Array<colConfig>,
-    tableData: Array<data>
+    tableData: Array<data>,
+    clickRow: Function,
 }>();
 
 const { colConfigs, tableData } = toRefs(props);
+// const { clickRow } = props;
 
 const tableRowClassName = ({
     rowIndex,
@@ -29,6 +33,14 @@ const tableRowClassName = ({
     } else {
         return 'row'
     }
+}
+
+const indexMethod = (index: number) => {
+    return index + 1;
+}
+
+const clickRow = (row: data) => {
+    props.clickRow(row.id, row);
 }
 
 </script>

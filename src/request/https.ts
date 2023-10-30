@@ -23,13 +23,13 @@ axios.interceptors.request.use(
 // 响应拦截器
 axios.interceptors.response.use(
     response => {
-        console.log(response);
         const res = response.data;
         // console.log(response.headers["content-disposition"], "Res");
         // const disposition = response.headers["content-disposition"];
         // 获取数据
         if (res.code === 200) {
-            return res.result;
+            const data = res.result ?? res.data ?? res.message ;
+            return data;
         } 
         const code = res.code ?? response.status;
         errorHandle(code, res.message ?? response.statusText);

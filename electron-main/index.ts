@@ -4,6 +4,10 @@
   
  const createWindow = () => {
    const win = new BrowserWindow({
+     height: 680,
+     width: 1020,
+     titleBarStyle: "hidden",
+     titleBarOverlay:true,
      webPreferences: {
        contextIsolation: false, // 是否开启隔离上下文
        nodeIntegration: true, // 渲染进程使用Node API
