@@ -10,4 +10,5 @@ export type data = {
     picUrl: string, //歌曲图片url,
     musicUrl: string, //歌曲url
     dt: number, //歌曲总时长
+    isCollect: boolean, //是否已收藏
 }

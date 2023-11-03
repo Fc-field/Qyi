@@ -1,25 +1,27 @@
 <template>
-    <div class="common-layout">
-        <el-container>
-            <el-header>
-                <el-input v-model="keywords" class="w-50 m-2" placeholder="Search somethings" :prefix-icon="Search"
-                    @keyup.enter="cloudSearch(1)" style="width: 40%;" />
-            </el-header>
-            <el-main>
+    <div>
+        <div class="common-layout">
+            <el-container>
+                <el-header>
+                    <el-input v-model="keywords" class="w-50 m-2" placeholder="Search somethings" :prefix-icon="Search"
+                        @keyup.enter="cloudSearch(1)" style="width: 40%;" />
+                </el-header>
+                <el-main>
 
-                <div v-show="tableData.length">
-                    <QyiTable :col-configs="colConfigs" :table-data="tableData" :click-row="playMuisc"></QyiTable>
-                    <QyiPagination :total="total" :get-list="cloudSearch"></QyiPagination>
-                </div>
+                    <div v-show="tableData.length">
+                        <QyiTable :col-configs="colConfigs" :table-data="tableData" :click-row="playMuisc"></QyiTable>
+                        <QyiPagination :total="total" :get-list="cloudSearch"></QyiPagination>
+                    </div>
 
-                <div v-show="!tableData.length">
-                    快开始搜歌吧
-                </div>
-                <div v-loading="loading" element-loading-text="加载中..." style="height: 100px;">
-                </div>
+                    <div class="initial" v-show="initial">
+                        快搜索你喜欢的歌曲吧~~~
+                    </div>
+                    <div v-loading="loading" element-loading-text="加载中..." style="height: 100px;">
+                    </div>
 
-            </el-main>
-        </el-container>
+                </el-main>
+            </el-container>
+        </div>
     </div>
 </template>
 
@@ -31,12 +33,15 @@ import QyiTable from '@/components/QyiTable.vue';
 import { data } from "@/utils"
 import { cloudSearchInfo, musicUrlInfo } from "./type"
 import QyiPagination from "@/components/QyiPagination.vue"
-import { useMusicStore } from "@/stores/index"
+import { useMusicStore,useCollectList } from "@/stores/index"
 
 
 const musicStore = useMusicStore();
+const collectStore = useCollectList();
 
 const keywords = ref(""); //关键词
+const initial = ref(true);
+
 //表单配置
 const colConfigs = reactive([
     {
@@ -61,6 +66,12 @@ const total = ref(0);//歌曲总数
 const loading = ref(false);
 //搜索歌曲
 const cloudSearch = async (offset: number) => {
+    if (keywords.value === "") {   //关键词为空回到初始状态
+        initial.value = true;
+        tableData.length = 0;
+        return;
+    }
+    initial.value = false;
     tableData.length = 0;
     loading.value = true;
     const result = (await search({
@@ -88,7 +99,8 @@ const cloudSearch = async (offset: number) => {
             id: item.id,
             picUrl: item.al.picUrl,
             musicUrl: "",
-            dt: item.dt
+            dt: item.dt,
+            isCollect: collectStore.checkCollect(item.id)
         })
     });
     loading.value = false;
@@ -114,6 +126,19 @@ const playMuisc = async (id: string, row: data) => {
 </script>
 
 <style scoped lang="scss">
+.common-layout {
+    // min-height: 50%;
+    overflow: auto;
+}
+
+.initial {
+    height: 100%;
+    font-size: 2em;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+    padding-top: 10%;
+}
+
 .el-input {
     display: flex;
 }

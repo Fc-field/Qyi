@@ -1,0 +1,25 @@
+@font-face {
+    font-family: "iconfont";
+    /* Project id 4314557 */
+    src: url('iconfont.woff2?t=1698981828209') format('woff2'), url('iconfont.woff?t=1698981828209') format('woff'), url('iconfont.ttf?t=1698981828209') format('truetype');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 22px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-jushoucang:before {
+    content: "\e643";
+}
+
+.icon-jushoucanggift:before {
+    content: "\e684";
+}
+
+.icon-shoucang1:before {
+    content: "\e629";
+}

@@ -1,7 +1,7 @@
 import { defineStore } from "pinia"
 import { reactive } from "vue";
 import { data } from "@/utils";
-
+//播放音乐
 export const useMusicStore = defineStore("music", () => {
     const playMusic = reactive({
         musicUrl: "",

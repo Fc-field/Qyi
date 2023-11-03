@@ -4,7 +4,7 @@
     <div class="bar">
         <div class="progress-bar" @click="playMusic" ref="runfatbar">
             <div class="blue-bar" ref="runbar">
-                <span class="circle"></span>
+                <span class="circle" ref="circle"></span>
             </div>
         </div>
     </div>
@@ -25,11 +25,13 @@ const props = defineProps<{
 const musicStore = useMusicStore();
 const player = ref();
 const runbar = ref();
+const runfatbar = ref();
+const circle = ref();
 
 const cTime = ref("00:00"); //已播放时间
 const { time: dTime } = toRefs(musicStore.playMusic); //总播放时间
 const playMusic = () => {
-    player.value.play();
+    // player.value.play();
 };
 
 watch([() => props.isPlay, () => musicStore.playMusic.musicUrl], ([newValue1, newValue2], [, oldValue2]) => {
@@ -45,6 +47,8 @@ watch([() => props.isPlay, () => musicStore.playMusic.musicUrl], ([newValue1, ne
 })
 
 onMounted(() => {
+    // const musicWidth = runfatbar.value.offsetWidth; // 底部进度条总宽
+    //进度条移动
     player.value.addEventListener("timeupdate", () => {
         const musicTime = musicStore.playMusic.dt / 1000;
         const stopTime = player.value.currentTime; // 获得已播放的音频时长
@@ -61,7 +65,46 @@ onMounted(() => {
         } else {
             cTime.value = `${branch}:${second}`;
         }
-    })
+    });
+    //拖拽进度条
+    // console.dir(circle.value);
+    // runfatbar.value.addEventListener("click", (e: any) => {
+    //     console.log(e.pageX);
+
+    //     if (e.pageX <= musicWidth) {
+    //         runbar.value.style.width = `${(e.pageX / musicWidth) * 100}%`;// 计算进度条所在比例宽度                  
+    //         //改变播放状态         
+    //         player.value.pause();// 触摸拖动时停止播放         
+    //     }
+    // })
+    // circle.value.addEventListener("drag", (event: { targetTouches: { pageX: number; }[]; }) => {
+    //     // const events = event.targetTouches[0].pageX; // 获得触摸拖动的距离
+    //     console.log(123);
+
+    //     // if (events <= musicWidth) {
+    //     //     runbar.value.style.width = `${(events / musicWidth) * 100}%`;// 计算进度条所在比例宽度                  
+    //     //     //改变播放状态         
+    //     //     player.value.pause();// 触摸拖动时停止播放         
+    //     // }
+
+    // });
+    // // 监听颜色进度条是否触摸拖动结束     
+    // circle.value.addEventListener('dragend', () => {
+    //     console.log(456);
+
+    //     const touwidth = (runbar.value.offsetWidth / musicWidth);// 计算进度条所在比例
+    //     player.value.currentTime = player.value.duration * touwidth;// 通过所在比例赋值给音频应在的播放时                  
+    //     // 改变播放状态，进行播放         
+    //     player.value.play();
+
+    //     if (touwidth < musicWidth) {
+    //         player.value.play();// 根据播放时间开始播放         
+
+    //     } else if (touwidth >= musicWidth) {
+    //         player.value.pause();// 触摸拖动时停止播放         
+
+    //     }
+    // })
 })
 
 </script>
@@ -99,6 +142,10 @@ onMounted(() => {
                 background-color: #fff;
             }
         }
+    }
+
+    .progress-bar:hover {
+        cursor: pointer;
     }
 }
 
