@@ -9,18 +9,30 @@ export const useCollectList = defineStore("collectlist", () => {
     const increaseMusic = (music: data) => {
         collectList.push(music);
     }
+    //取消收藏
+    const cancleCollect = (id: string) => {
+        collectList.forEach((item: data, index: number) => {
+            if (item.id === id) {
+                collectList.splice(index, 1);
+            }
+        });
+    }
 
     //检测是否歌曲已被收藏
     const checkCollect = (id: string) => {
-        collectList.map(item => {
-            if (item.id === id) return true;
+        let isCollect = false;
+        collectList.forEach(item => {
+            if (item.id === id) {
+                isCollect = true;
+            }
         })
-        return false;
+        return isCollect;
     }
 
     return {
         collectList,
         increaseMusic,
-        checkCollect
+        checkCollect,
+        cancleCollect
     }
 })

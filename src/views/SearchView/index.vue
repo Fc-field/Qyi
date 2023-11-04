@@ -33,7 +33,7 @@ import QyiTable from '@/components/QyiTable.vue';
 import { data } from "@/utils"
 import { cloudSearchInfo, musicUrlInfo } from "./type"
 import QyiPagination from "@/components/QyiPagination.vue"
-import { useMusicStore,useCollectList } from "@/stores/index"
+import { useMusicStore, useCollectList } from "@/stores/index"
 
 
 const musicStore = useMusicStore();
@@ -101,7 +101,7 @@ const cloudSearch = async (offset: number) => {
             musicUrl: "",
             dt: item.dt,
             isCollect: collectStore.checkCollect(item.id)
-        })
+        });
     });
     loading.value = false;
 }

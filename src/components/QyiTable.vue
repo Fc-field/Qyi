@@ -3,19 +3,20 @@
         @row-dblclick="clickRow">
         <el-table-column type="index" :index="indexMethod" />
         <el-table-column v-for="colConfig in colConfigs" :prop="colConfig.prop" :label="colConfig.label"></el-table-column>
-        <!-- <el-table-column>
+        <el-table-column>
             <template #default="scope">
                 <span class="iconfont" :class="scope.row.isCollect ? 'icon-jushoucanggift' : 'icon-jushoucang'"
                     @click="collect(scope.row)"></span>
             </template>
-        </el-table-column> -->
+        </el-table-column>
     </el-table>
 </template>
   
 <script lang="ts" setup>
 import { toRefs } from 'vue';
 import { data } from "@/utils";
-// import "@/../public/iconfont/iconfont.css"
+import "@/../public/iconfont/iconfont.css"
+import { useCollectList } from '@/stores';
 
 type colConfig = {
     prop: string,
@@ -30,13 +31,15 @@ const props = defineProps<{
 const { colConfigs, tableData } = toRefs(props);
 // const { clickRow } = props;
 
+const collectList = useCollectList();
+
 const tableRowClassName = ({
     rowIndex,
 }: {
     rowIndex: number
 }) => {
     if (rowIndex % 2 === 0) {
-        return 'tragger-row '
+        return 'tragger-row'
     } else {
         return ''
     }
@@ -50,23 +53,28 @@ const clickRow = (row: data) => {
     props.clickRow(row.id, row);
 }
 
-// const collect = (row: data) => {
-//     row.isCollect = !row.isCollect;
+const collect = (row: data) => {
+    row.isCollect = !row.isCollect;
+    if (row.isCollect) {
+        collectList.increaseMusic(row);
+    } else {
+        collectList.cancleCollect(row.id);
+    }
 
-// }
+}
 
 </script>
   
 <style scoped lang="scss">
-// .icon-jushoucang:hover {
-//     color: black;
-// }
+.icon-jushoucang:hover {
+    color: red;
+}
 
-// .icon-jushoucanggift {
-//     color: red;
-// }
+.icon-jushoucanggift {
+    color: red;
+}
 
-:deep(.el-table .tragger-row) {
+.el-table :deep(.tragger-row) {
     --el-table-tr-bg-color: #f9f9f9;
     white-space: nowrap;
     text-overflow: ellipsis;
