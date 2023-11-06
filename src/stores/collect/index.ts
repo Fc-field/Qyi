@@ -3,7 +3,7 @@ import { reactive } from "vue";
 import { data } from "@/utils";
 
 
-export const useCollectList = defineStore("collectlist", () => {
+export const useCollectStore = defineStore("collect", () => {
     const collectList = reactive<Array<data>>([]);//收藏列表
     //收藏
     const increaseMusic = (music: data) => {

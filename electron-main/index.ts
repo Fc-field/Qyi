@@ -1,6 +1,9 @@
  // electron-main/index.ts
- import { app, BrowserWindow } from "electron"
- import path from "path"
+import { app, BrowserWindow, ipcMain } from "electron";
+import path from "path";
+import Store from "electron-store";
+
+ const store = new Store();
   
  const createWindow = () => {
    const win = new BrowserWindow({
@@ -9,12 +12,12 @@
      titleBarStyle: "hidden",
      titleBarOverlay:true,
      webPreferences: {
-       contextIsolation: false, // 是否开启隔离上下文
-       nodeIntegration: true, // 渲染进程使用Node API
+      //  contextIsolation: true, // 是否开启隔离上下文
+      //  nodeIntegration: true, // 渲染进程使用Node API
        preload: path.join(__dirname, "./preload.js"), // 需要引用js文件
      },
    })
-  
+   
    // 如果打包了，渲染index.html
    if (process.env.NODE_ENV !== 'development') {
      win.loadFile(path.join(__dirname, "./index.html"))
@@ -26,11 +29,23 @@
    }
  }
   
- app.whenReady().then(() => {
-   createWindow() // 创建窗口
-   app.on("activate", () => {
-     if (BrowserWindow.getAllWindows().length === 0) createWindow()
-   })
+app.whenReady().then(() => {
+  // 定义ipcRenderer监听事件
+  ipcMain.on('setStore', (_, key, value) => {
+    console.log(store.path);
+    store.set(key, value);
+  });
+
+  ipcMain.on('getStore', (_, key) => {
+    let value = store.get(key)
+    _.returnValue = value || ""
+  });
+
+  createWindow(); // 创建窗口
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow()
+  });
  })
   
  // 关闭窗口
@@ -39,3 +54,8 @@
      app.quit()
    }
  }) 
+ 
+
+
+
+ 

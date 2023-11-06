@@ -18,7 +18,8 @@ import { onMounted, ref, toRefs, watch } from 'vue';
 import { useMusicStore } from '@/stores';
 
 const props = defineProps<{
-    isPlay: boolean
+    isPlay: boolean,
+    sentenceBox: any
 }>();
 
 
@@ -33,6 +34,29 @@ const { time: dTime } = toRefs(musicStore.playMusic); //总播放时间
 const playMusic = () => {
     // player.value.play();
 };
+
+/**
+ * 计算出在当前播放器播放到第几秒的情况下，
+ * lrcData数组中，应高亮显示的歌词下标, 
+ * 若没有任何一句歌词需要显示，得到-1
+ */
+const findIndex = () => {
+    const curTime = player.value.currentTime;
+    for (var i = 0; i < musicStore.playMusic.lyr.length; i++) {
+        if (curTime < musicStore.playMusic.lyr[i].time) {
+            return i - 1;
+        }
+    }
+    // 找遍了还没找到，即最后一句
+    return musicStore.playMusic.lyr.length - 1;
+}
+
+const setOffset = () => {
+    const index = findIndex();
+
+    const offset = index * 36;
+    props.sentenceBox.style.transform = `translateY(-${offset}px)`;
+}
 
 watch([() => props.isPlay, () => musicStore.playMusic.musicUrl], ([newValue1, newValue2], [, oldValue2]) => {
     if (newValue2 !== oldValue2) {
@@ -64,7 +88,8 @@ onMounted(() => {
             cTime.value = `${branch}:0${second}`;
         } else {
             cTime.value = `${branch}:${second}`;
-        }
+        };
+        setOffset();
     });
     //拖拽进度条
     // console.dir(circle.value);

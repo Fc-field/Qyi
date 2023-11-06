@@ -24,11 +24,12 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
     response => {
         const res = response.data;
+        
         // console.log(response.headers["content-disposition"], "Res");
         // const disposition = response.headers["content-disposition"];
         // 获取数据
         if (res.code === 200) {
-            const data = res.result ?? res.data ?? res.message ;
+            const data = res.result ?? res.data ?? res.message ?? res.lrc.lyric; ;
             return data;
         } 
         const code = res.code ?? response.status;

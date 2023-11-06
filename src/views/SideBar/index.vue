@@ -9,7 +9,7 @@
       <el-main>
         <div v-for="feature in features" class="features" :class="feature.choice ? 'choice' : ''"
           @click="choiceDiv(feature)">
-          {{ feature.name }}
+          {{ feature.label }}
         </div>
       </el-main>
     </el-container>
@@ -19,14 +19,21 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue';
-import { Features } from "./type"
-const features = reactive([{ name: "搜索", choice: true }, { name: "我的收藏", choice: false }]);
+import { Features } from "./type";
+import { useRouter } from 'vue-router';
+
+const features = reactive([
+  { name: "Search", label: "搜索", choice: true },
+  { name: "Collect", label: "我的收藏", choice: false }
+]);
+const router = useRouter();
 
 const choiceDiv = (feature: Features) => {
   features.map((item: Features) => {
     item.choice = false;
   })
   feature.choice = true;
+  router.push({ name: `${feature.name}` });
 }
 
 </script>

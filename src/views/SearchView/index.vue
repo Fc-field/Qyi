@@ -7,9 +7,8 @@
                         @keyup.enter="cloudSearch(1)" style="width: 40%;" />
                 </el-header>
                 <el-main>
-
                     <div v-show="tableData.length">
-                        <QyiTable :col-configs="colConfigs" :table-data="tableData" :click-row="playMuisc"></QyiTable>
+                        <QyiTable :col-configs="colConfigs" :table-data="tableData" :search-click="playMuisc"></QyiTable>
                         <QyiPagination :total="total" :get-list="cloudSearch"></QyiPagination>
                     </div>
 
@@ -18,7 +17,6 @@
                     </div>
                     <div v-loading="loading" element-loading-text="加载中..." style="height: 100px;">
                     </div>
-
                 </el-main>
             </el-container>
         </div>
@@ -28,16 +26,18 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { Search } from '@element-plus/icons-vue';
-import { search, checkSong, getMusicUrl } from "@/request/api"
+import { search, checkSong, getMusicUrl, getMusicSentence } from "@/request/api"
 import QyiTable from '@/components/QyiTable.vue';
 import { data } from "@/utils"
 import { cloudSearchInfo, musicUrlInfo } from "./type"
 import QyiPagination from "@/components/QyiPagination.vue"
-import { useMusicStore, useCollectList } from "@/stores/index"
+import { useMusicStore, useCollectStore, useMusicListStore } from "@/stores/index"
 
 
 const musicStore = useMusicStore();
-const collectStore = useCollectList();
+const collectStore = useCollectStore();
+const musicListStore = useMusicListStore();
+
 
 const keywords = ref(""); //关键词
 const initial = ref(true);
@@ -108,17 +108,21 @@ const cloudSearch = async (offset: number) => {
 
 //播放歌曲
 const playMuisc = async (id: string, row: data) => {
-    console.log(id);
     // const result = await getMusicUrl({ id, level: "standard " });
     const isPlay = await checkSong({ id }) as unknown as string; //检测歌曲是否可用 ok || “字符串”
     const musicData = isPlay === "ok" ? await getMusicUrl({ id, level: "standard " }) as unknown as musicUrlInfo[] : [{ url: null }];
     if (musicData[0].url) {
         row.musicUrl = musicData[0].url;
-        musicStore.setPlayMusic(row);
+        musicStore.setPlayMusic(row, true);
+        musicListStore.addMusicList(row);
+        getMusicSentence({ id }).then(res => {
+            console.log(res, 123);
+
+        })
+
     } else {
         ElMessage.error("暂无该歌曲版权");
     }
-
 
 
 }

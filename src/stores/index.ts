@@ -1,3 +1,3 @@
-export * from "./music"
 export * from "./musiclist"
-export * from "./collectlist"
+export * from "./music"
+export * from "./collect"

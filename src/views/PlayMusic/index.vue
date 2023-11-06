@@ -1,19 +1,19 @@
 <template>
-    <el-row :gutter="20" align="middle">
+    <el-row :gutter="24" align="middle">
         <el-col :span="2">
             <div class="grid-content ep-bg-purple">
                 <el-avatar shape="square" size="large" :src="musicStore.playMusic.picUrl" />
             </div>
         </el-col>
-        <el-col :span="16">
+        <el-col :span="18">
             <div class="grid-content ep-bg-purple">
-                <el-row :gutter="20" align="middle">
-                    <el-col :span="8">
+                <el-row :gutter="24" align="middle">
+                    <el-col :span="6">
                         <div class="grid-content ep-bg-purple singer ">
                             {{ musicStore.playMusic.name }}-{{ musicStore.playMusic.singer }}
                         </div>
                     </el-col>
-                    <el-col :span="16">
+                    <el-col :span="8">
                         <div class="grid-content ep-bg-purple something">
                             <svg t="1698653901788" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                 xmlns="http://www.w3.org/2000/svg" p-id="6309" width="30" height="30">
@@ -47,39 +47,58 @@
                             </svg>
                         </div>
                     </el-col>
-
+                    <el-col :span="10">
+                        <div class="grid-content ep-bg-purple box">
+                            <ul ref="sentence" class="sentenceBox">
+                                <li v-for="sentence in musicStore.playMusic.lyr" :key="sentence.time">
+                                    {{ sentence.words }}
+                                </li>
+                            </ul>
+                        </div>
+                    </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="24">
                         <div class="grid-content ep-bg-purple progress">
-                            <QyiProgress :is-play="display"></QyiProgress>
+                            <QyiProgress :is-play="display" :sentence-box="sentence"></QyiProgress>
                         </div>
                     </el-col>
                 </el-row>
             </div>
         </el-col>
-        <el-col :span="6">
-            <div class="grid-content ep-bg-purple">
-                歌曲表单
+        <el-col :span="4">
+            <div class="grid-content ep-bg-purple" style="display: flex;justify-content: center;align-items: center;"
+                @click="clickHistroy">
+                <span class="iconfont icon-liebiao"></span>
+                <span>播放记录</span>
             </div>
         </el-col>
     </el-row>
+    <MusicList :dialog-visible="dialogVisible" @close="dialogVisible = false"></MusicList>
 </template>
-
-  
 
 <script setup lang="ts">
 import { useMusicStore } from "@/stores/index";
 import QyiProgress from "@/components/QyiProgress.vue";
-import { toRefs } from "vue";
+import { ref, toRefs } from "vue";
+import MusicList from "./MusicList.vue";
+import "@/../public/iconfont/iconfont.css";
 
 const musicStore = useMusicStore();
 const { isPlay: display } = toRefs(musicStore.playMusic);
+const dialogVisible = ref(false);
+
+const sentence = ref();//歌词
+
 const playMusic = () => {
     display.value = !display.value;
     console.log(display.value);
-
 }
+
+const clickHistroy = () => {
+    dialogVisible.value = true;
+}
+
 
 </script>
 
@@ -108,6 +127,9 @@ const playMusic = () => {
 .singer {
     display: flex;
     align-items: center;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .something {
@@ -115,13 +137,27 @@ const playMusic = () => {
     align-items: center;
     justify-content: center;
     position: relative;
-    right: 80px;
 
     .icon {
         margin: 0 6px;
     }
+}
 
+.box {
+    height: 36px;
+    overflow: hidden;
 
+    .sentenceBox {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+
+        li {
+            line-height: 36px;
+            list-style: none;
+            text-align: left;
+        }
+    }
 }
 
 .progress {
