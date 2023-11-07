@@ -1,11 +1,15 @@
 <template>
-    <div class="common-layout">
-        <el-container>
-            <el-main>
-                <QyiTable :col-configs="colConfigs" :table-data="collectStore.collectList" :collect-click="playMuisc">
-                </QyiTable>
-            </el-main>
-        </el-container>
+    <div>
+        <div class="common-layout">
+            <el-container>
+                <el-header class="header">
+                </el-header>
+                <el-main>
+                    <QyiTable :col-configs="colConfigs" :table-data="collectStore.collectList" :collect-click="playMuisc">
+                    </QyiTable>
+                </el-main>
+            </el-container>
+        </div>
     </div>
 </template>
 
@@ -56,4 +60,10 @@ const playMuisc = async (row: data) => {
 
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.header {
+    position: sticky;
+    top: 0px;
+    z-index: 1000;
+}
+</style>

@@ -1,25 +1,23 @@
 <template>
-    <div>
-        <div class="common-layout">
-            <el-container>
-                <el-header>
-                    <el-input v-model="keywords" class="w-50 m-2" placeholder="Search somethings" :prefix-icon="Search"
-                        @keyup.enter="cloudSearch(1)" style="width: 40%;" />
-                </el-header>
-                <el-main>
-                    <div v-show="tableData.length">
-                        <QyiTable :col-configs="colConfigs" :table-data="tableData" :search-click="playMuisc"></QyiTable>
-                        <QyiPagination :total="total" :get-list="cloudSearch"></QyiPagination>
-                    </div>
+    <div class="common-layout">
+        <el-container>
+            <el-header class="header">
+                <el-input v-model="keywords" class="w-50 m-2" placeholder="Search somethings" :prefix-icon="Search"
+                    @keyup.enter="cloudSearch(1)" style="width: 40%;" />
+            </el-header>
+            <el-main>
+                <div v-if="tableData.length">
+                    <QyiTable :col-configs="colConfigs" :table-data="tableData" :search-click="playMuisc"></QyiTable>
+                    <QyiPagination :total="total" :get-list="cloudSearch"></QyiPagination>
+                </div>
 
-                    <div class="initial" v-show="initial">
-                        快搜索你喜欢的歌曲吧~~~
-                    </div>
-                    <div v-loading="loading" element-loading-text="加载中..." style="height: 100px;">
-                    </div>
-                </el-main>
-            </el-container>
-        </div>
+                <div class="initial" v-show="initial">
+                    快搜索你喜欢的歌曲吧~~~
+                </div>
+                <div v-loading="loading" element-loading-text="加载中..." :class="loading ? 'isloading' : 'loaded'">
+                </div>
+            </el-main>
+        </el-container>
     </div>
 </template>
 
@@ -131,23 +129,86 @@ const playMuisc = async (id: string, row: data) => {
 
 <style scoped lang="scss">
 .common-layout {
-    // min-height: 50%;
-    overflow: auto;
-}
-
-.initial {
     height: 100%;
-    font-size: 2em;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    text-align: center;
-    padding-top: 10%;
+    // min-height: 50%;
+    // overflow: auto;
+    // overflow: hidden;
+    overflow: hidden;
+
 }
 
-.el-input {
-    display: flex;
+.el-container {
+    height: 100%;
+    overflow: hidden;
+
+
 }
+
 
 .el-main {
     padding-top: 0;
+
+    .initial {
+        font-size: 2em;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        text-align: center;
+        padding-top: 10%;
+    }
+
+    // 滚动条整体部分
+    &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    // 滚动条的轨道的两端按钮，允许通过点击微调小方块的位置。
+    &::-webkit-scrollbar-button {
+        display: none;
+    }
+
+    // 滚动条的轨道（里面装有Thumb）
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    // 滚动条的轨道（里面装有Thumb）
+    &::-webkit-scrollbar-track-piece {
+        background-color: transparent;
+    }
+
+    // 滚动条里面的小方块，能向上向下移动（或往左往右移动，取决于是垂直滚动条还是水平滚动条）
+    &::-webkit-scrollbar-thumb {
+        background: rgba(144, 147, 153, 0.3);
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    // 边角，即两个滚动条的交汇处
+    &::-webkit-scrollbar-corner {
+        display: none;
+    }
+
+    // 两个滚动条的交汇处上用于通过拖动调整元素大小的小控件
+    &::-webkit-resizer {
+        display: none;
+    }
+}
+
+.header {
+    position: sticky;
+    top: 0px;
+    z-index: 1000;
+
+    .el-input {
+        display: flex;
+    }
+}
+
+.loading {
+    height: 100px;
+}
+
+.loaded {
+    height: 0;
 }
 </style>
