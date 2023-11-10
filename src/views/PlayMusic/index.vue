@@ -67,7 +67,7 @@
             </div>
         </el-col>
         <el-col :span="4">
-            <div class="grid-content ep-bg-purple" style="display: flex;justify-content: center;align-items: center;"
+            <div class="grid-content ep-bg-purple record" style="display: flex;justify-content: center;align-items: center;"
                 @click="clickHistroy">
                 <span class="iconfont icon-liebiao"></span>
                 <span>播放记录</span>
@@ -151,6 +151,7 @@ const clickHistroy = () => {
         overflow: hidden;
         margin: 0;
         padding: 0;
+        color: #7c7979;
 
         li {
             line-height: 36px;
@@ -163,5 +164,9 @@ const clickHistroy = () => {
 .progress {
     position: relative;
 
+}
+
+.record:hover {
+    cursor: pointer;
 }
 </style>

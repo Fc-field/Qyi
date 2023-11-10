@@ -137,20 +137,20 @@ onMounted(() => {
 <style scoped lang="scss">
 .bar {
     width: 80%;
-    height: .3rem;
+    height: .4rem;
     position: absolute;
     bottom: 20px;
     margin-left: 10%;
 
     .progress-bar {
         width: 100%;
-        height: .1rem;
+        height: .2rem;
         margin-top: .1rem;
         border-radius: .2rem;
-        background-color: #999999;
+        background-color: #cdcdcd;
 
         .blue-bar {
-            height: .1rem;
+            height: .2rem;
             position: absolute;
             top: .1rem;
             left: 0;
@@ -159,7 +159,7 @@ onMounted(() => {
 
             .circle {
                 width: .2rem;
-                height: .2rem;
+                height: .3rem;
                 position: absolute;
                 top: -.05rem;
                 right: -0.01rem;
@@ -179,9 +179,11 @@ onMounted(() => {
     bottom: 20px;
     font-size: 13px;
     line-height: .5rem;
+    color: #7c7979;
+    left: 4%;
 }
 
 .all-time {
-    right: 0;
+    right: -84%;
 }
 </style>

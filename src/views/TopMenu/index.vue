@@ -38,5 +38,9 @@ const close = () => {
     .iconfont {
         font-size: 18px !important;
     }
+
+    .iconfont:hover {
+        cursor: pointer;
+    }
 }
 </style>

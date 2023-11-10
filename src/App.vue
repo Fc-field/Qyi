@@ -83,6 +83,7 @@ onBeforeUnmount(() => {
 
 .el-footer {
   height: 10vh;
-  background-color: greenyellow;
+  background-color: #fff;
+  border-top: 1px solid #e5e5e5;
 }
 </style>
